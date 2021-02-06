@@ -1,9 +1,7 @@
+import Part from "./part";
+
 const Content = ({part, exercise}) => {
-    return (
-        <p>
-            {part} {exercise}
-        </p>
-    )
+    return <Part part={part} exercise={exercise} />
 }
 
-export default Content;
+export default Content
