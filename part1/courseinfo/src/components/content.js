@@ -1,6 +1,6 @@
 import Part from "./part";
 
-const Content = ({part1, part2, part3}) => {
+const Content = ({parts: [part1, part2, part3]}) => {
     return (
             <div>
                 <Part part={part1} />

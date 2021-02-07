@@ -1,5 +1,5 @@
-const Total = ({exercise1, exercise2, exercise3}) => {
-    return <p>Number of exercises {exercise1 + exercise2 + exercise3}</p>
+const Total = ({parts: [part1, part2, part3]}) => {
+    return <p>Number of exercises {part1.exercises + part2.exercises + part3.exercises}</p>
 }
 
 export default Total;
