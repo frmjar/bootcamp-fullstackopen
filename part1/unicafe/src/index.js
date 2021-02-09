@@ -3,21 +3,32 @@ import ReactDOM from 'react-dom'
 import './index.css';
 
 const Statistics = ({good, neutral, bad}) => {
-	const total = good + neutral + bad
-	const positive = (good / total) * 100
-	const average = (good - bad) / total
+	const hasChangeState = good !== 0 || neutral !== 0 || bad !== 0
 
-	return (
-		<div>
-			<h1>Statistics</h1>
-			<p><span>Good: {good}</span></p>
-			<p><span>Neutral: {neutral}</span></p>
-			<p><span>Bad: {bad}</span></p>
-			<p><span>All: {total}</span></p>
-			<p><span>Average: {average}</span></p>
-			<p><span>Positive: {positive} %</span></p>
-		</div>
-	)
+	if (hasChangeState) {
+
+		const total = good + neutral + bad
+		const positive = (good / total) * 100
+		const average = (good - bad) / total
+
+		return (
+			<div>
+				<h1>Statistics</h1>
+				<p><span>Good: {good}</span></p>
+				<p><span>Neutral: {neutral}</span></p>
+				<p><span>Bad: {bad}</span></p>
+				<p><span>All: {total}</span></p>
+				<p><span>Average: {average}</span></p>
+				<p><span>Positive: {positive} %</span></p>
+			</div>
+		)
+	} else
+		return (
+			<div>
+				<h1>Statistics</h1>
+				<p><span>No feedback given</span></p>
+			</div>
+		)
 }
 
 const App = () => {
