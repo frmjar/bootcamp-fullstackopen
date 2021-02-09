@@ -1,0 +1,11 @@
+body {
+  width: 50%;
+  margin: 50px auto;
+}
+
+button {
+  height: 30px;
+  width: 80px;
+  margin: 0 5px;
+  font-size: 16px;
+}
