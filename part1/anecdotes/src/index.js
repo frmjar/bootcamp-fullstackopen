@@ -2,21 +2,6 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import './index.css';
 
-const App = (props) => {
-    const [selected, setSelected] = useState(0)
-
-    const getRandomNumber = (min, max) => {
-        return Math.floor(Math.random() * (max - min)) + min
-    }
-
-    return (
-        <div>
-            <button onClick={() => setSelected(getRandomNumber(0, anecdotes.length))}>Next anecdote</button>
-            <p>{props.anecdotes[selected]}</p>
-        </div>
-    )
-}
-
 const anecdotes = [
     'If it hurts, do it more often',
     'Adding manpower to a late software project makes it later!',
@@ -25,6 +10,35 @@ const anecdotes = [
     'Premature optimization is the root of all evil.',
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
+
+const App = (props) => {
+    const [selected, setSelected] = useState(0)
+    const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
+
+    const getRandomNumber = (min, max) => {
+        let random
+        do {
+            random = Math.floor(Math.random() * (max - min)) + min
+        }while(random === selected)
+
+        return random
+    }
+
+    const addVotes = () => {
+        const aux = [...votes]
+        aux[selected] = aux[selected] + 1
+        return aux
+    }
+
+    return (
+        <div>
+            <p>{props.anecdotes[selected]}</p>
+            <p><span>Has {votes[selected]} votes</span></p>
+            <button onClick={()=> setVotes(addVotes)}>Vote</button>
+            <button onClick={() => setSelected(getRandomNumber(0, anecdotes.length))}>Next anecdote</button>
+        </div>
+    )
+}
 
 ReactDOM.render(
     <App anecdotes={anecdotes} />,
