@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 
 const Header = ({name}) => <h1>{name}</h1>
 
-const Total = ({ course }) => {
-    const sum = course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises
+const Total = ({ parts }) => {
+    let sum = parts.reduce((sum, part) => sum + part.exercises, 0)
     return(
-        <p>Number of exercises {sum}</p>
+        <p><strong>Number of exercises {sum}</strong></p>
     )
 }
 
@@ -22,6 +22,7 @@ const Content = ({ parts }) => {
     return (
         <div>
             {parts.map(part => <Part key={part.id} part={part} />)}
+            <Total parts={parts} />
         </div>
     )
 }
