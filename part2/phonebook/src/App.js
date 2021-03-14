@@ -1,54 +1,32 @@
 import React, {useState} from 'react';
+import {PersonForm} from './components/PersonForm.js';
+import {Persons} from './components/Persons.js';
+import {Filter} from './components/Filter.js';
 import './App.css';
 
 const App = () => {
+
   const [persons, setPersons] = useState([
-    {name: 'Arto Hellas', number:'91412412'},
+    {name: 'Arto Hellas', number: '040-123456'},
+    {name: 'Ada Lovelace', number: '39-44-5323523'},
+    {name: 'Dan Abramov', number: '12-43-234345'},
+    {name: 'Mary Poppendieck', number: '39-23-6423122'},
   ]);
+
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
-
-  const submitHandler = (evt) => {
-    evt.preventDefault();
-    if (!alreadyExist()) {
-      setPersons([...persons, {name: newName, number: newNumber}]);
-      setNewName('');
-      setNewNumber('');
-    }
-  };
-
-  const alreadyExist = () => {
-    const exist = persons.some((person) => person.name === newName);
-    if (exist) alert(`${newName} is already added to phonebook`);
-    return exist;
-  };
-
-  const changeNameHandler = (evt) => {
-    setNewName(evt.target.value);
-  };
-
-  const changeNumberHandler = (evt) => {
-    setNewNumber(evt.target.value);
-  };
+  const [newFilter, setNewFilter] = useState('');
 
   return (
       <div className={'container'}>
         <h2>Phonebook</h2>
-        <form onSubmit={submitHandler}>
-          <div>
-            <label>name: </label>
-            <input onChange={changeNameHandler} value={newName}/>
-          </div>
-          <div>
-            <label>number: </label>
-            <input onChange={changeNumberHandler} value={newNumber}/>
-          </div>
-          <div>
-            <button type="submit">add</button>
-          </div>
-        </form>
+        <Filter newFilter={newFilter} setNewFilter={setNewFilter}/>
+        <h2>Add a new</h2>
+        <PersonForm persons={persons} setPersons={setPersons} newName={newName}
+                    setNewName={setNewName}
+                    newNumber={newNumber} setNewNumber={setNewNumber}/>
         <h2>Numbers</h2>
-        {persons.map(person => <div key={person.name}>{person.name} {person.number}</div>)}
+        <Persons persons={persons} filter={newFilter}/>
       </div>
   );
 };
