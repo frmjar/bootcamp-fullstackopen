@@ -9,9 +9,17 @@ const App = () => {
 
   const submitHandler = (evt) => {
     evt.preventDefault();
-    setPersons([...persons, {name: newName}]);
-    setNewName('')
+    if(!alreadyExist()) {
+      setPersons([...persons, {name: newName}]);
+      setNewName('')
+    }
   };
+
+  const alreadyExist = () => {
+    const exist = persons.some((person) => person.name === newName);
+    if(exist) alert(`${newName} is already added to phonebook`)
+    return exist;
+  }
 
   const changeHandler = (evt) => {
     setNewName(evt.target.value);
