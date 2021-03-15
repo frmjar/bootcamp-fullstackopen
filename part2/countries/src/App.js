@@ -13,22 +13,30 @@ const Country = ({country}) => {
          .catch((e) => console.error('Error en la busqueda de info', e));
   }, []);
 
-  return (
-      <div>
-        <h1>{countryInfo.name}</h1>
-        <div><label>Capital</label><span>{countryInfo.capital}</span></div>
-        <div><label>Population</label><span>{countryInfo.population}</span>
+  if (countryInfo.name === undefined)
+    return <div/>;
+  else
+    return (
+        <div>
+          <h1>{countryInfo.name}</h1>
+          <div><label>Capital</label><span>{countryInfo.capital}</span></div>
+          <div><label>Population</label><span>{countryInfo.population}</span>
+          </div>
+          <h2>Languajes</h2>
+          <ul>
+            {countryInfo.languages.map(
+                language => <li key={language.iso639_1}>{language.name}</li>)}
+          </ul>
+          <img className={'flag'} src={countryInfo.flag} alt={'flag'}/>
         </div>
-        <h2>Languajes</h2>
-        <ul>
-          {countryInfo.languages.map(language => <li key={language.iso639_1}>{language.name}</li>)}
-        </ul>
-        <img className={'flag'} src={countryInfo.flag} alt={'flag'}/>
-      </div>
-  );
+    );
 };
 
-const Countries = ({countries}) => {
+const Countries = ({countries, setFindCountry}) => {
+
+  const clickHandler = (evt) => {
+    setFindCountry(evt.target.getAttribute('country_value'));
+  };
 
   if (countries.length > 10)
     return (
@@ -43,8 +51,14 @@ const Countries = ({countries}) => {
         <div>
           {countries.map(country =>
               <div key={country.name} className={'country'}>
-                {country.name}
-              </div>)
+                <span>
+                  {country.name}
+                </span>
+                <button country_value={country.name}
+                        onClick={clickHandler}>Show
+                </button>
+              </div>,
+          )
           }
         </div>
     );
@@ -69,7 +83,7 @@ function App() {
       <div className="App">
         <label>Find countries: </label>
         <input onChange={changeHandler} value={findCountry}/>
-        <Countries countries={countries}/>
+        <Countries countries={countries} setFindCountry={setFindCountry}/>
       </div>
   );
 }
