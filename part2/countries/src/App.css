@@ -1,0 +1,16 @@
+.App {
+    margin: 30px;
+}
+
+.country {
+    margin-top: 10px;
+}
+
+.flag {
+    height: 150px;
+    width: 150px;
+}
+
+label {
+    margin-right: 10px;
+}
