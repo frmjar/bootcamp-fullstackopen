@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 export const PersonForm = ({
   persons,
@@ -15,6 +16,7 @@ export const PersonForm = ({
       setPersons([...persons, {name: newName, number: newNumber}]);
       setNewName('');
       setNewNumber('');
+      save();
     }
   };
 
@@ -22,6 +24,14 @@ export const PersonForm = ({
     const exist = persons.some((person) => person.name === newName);
     if (exist) alert(`${newName} is already added to phonebook`);
     return exist;
+  };
+
+  const save = () => {
+    axios.post('http://localhost:3001/persons',
+        {name: newName, number: newNumber})
+         .then(() => console.log('Nuevo registro en la agenda'))
+         .catch((e) => alert(
+             'Ha ocurrido un error al guardar el nuevo contacto'));
   };
 
   const changeNameHandler = (evt) => {
