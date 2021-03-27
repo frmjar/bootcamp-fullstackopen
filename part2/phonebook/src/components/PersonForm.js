@@ -1,5 +1,5 @@
 import React from 'react';
-import {saveContact} from '../services/BBDD';
+import {saveContact, updateContact} from '../services/BBDD';
 
 export const PersonForm = ({
   persons,
@@ -12,20 +12,28 @@ export const PersonForm = ({
 
   const submitHandler = (evt) => {
     evt.preventDefault();
-    if (!alreadyExist()) {
+
+    const person = persons.find((person) => person.name === newName);
+
+    if (person === undefined) {
+      save();
       setPersons([
         ...persons,
         {name: newName, number: newNumber, id: persons.length + 1}]);
-      setNewName('');
-      setNewNumber('');
-      save();
+    } else {
+      const wantUpdate = window.confirm(
+          `${person.name} is already added to phonebook, replace the old number with a new one?`);
+      if (wantUpdate) {
+        update(person)
+        let auxPersons = persons
+        auxPersons[person.id-1].number = person.number
+        setPersons(auxPersons)
+      }
     }
-  };
 
-  const alreadyExist = () => {
-    const exist = persons.some((person) => person.name === newName);
-    if (exist) alert(`${newName} is already added to phonebook`);
-    return exist;
+    setNewName('');
+    setNewNumber('');
+
   };
 
   const save = () => {
@@ -33,6 +41,14 @@ export const PersonForm = ({
         .then(() => console.log('Nuevo registro en la agenda'))
         .catch(() => alert(
             'Ha ocurrido un error al guardar el nuevo contacto'));
+  };
+
+  const update = (person) => {
+    person.number = newNumber;
+    updateContact(person)
+        .then(() => console.log('Contacto modificado correctamente'))
+        .catch((e) => console.error(
+            'Ha ocurrido un error al actualizar el contacto', e));
   };
 
   const changeNameHandler = (evt) => {

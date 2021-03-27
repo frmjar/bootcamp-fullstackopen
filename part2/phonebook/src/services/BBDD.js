@@ -11,5 +11,10 @@ export const saveContact = (name, number) => {
 };
 
 export const deleteContact = (id) => {
-  return axios.delete(`${URL}/${id}`)
-}
+  return axios.delete(`${URL}/${id}`);
+};
+
+export const updateContact = (person) => {
+  return axios.put(`${URL}/${person.id}`, person)
+              .then((response) => response.data);
+};
