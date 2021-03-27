@@ -6,7 +6,7 @@ export const Persons = ({persons, filter}) => {
           person => filter === '' ? true :
               person.name.toLowerCase().includes(filter.toLowerCase()))
              .map(person =>
-              <div key={person.name}>{
+              <div key={person.id}>{
                 person.name} {person.number}
               </div>,
           )

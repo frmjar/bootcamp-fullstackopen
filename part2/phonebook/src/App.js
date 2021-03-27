@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {PersonForm} from './components/PersonForm.js';
 import {Persons} from './components/Persons.js';
 import {Filter} from './components/Filter.js';
+import {getAllContacts} from './services/BBDD';
 import './App.css';
 
 const App = () => {
@@ -13,9 +13,9 @@ const App = () => {
   const [newFilter, setNewFilter] = useState('');
 
   useEffect(() => {
-        axios.get('http://localhost:3001/persons')
-             .then(response => setPersons(response.data))
-             .catch(e => console.error('Error en el GET:', e));
+        getAllContacts()
+            .then(data => setPersons(data))
+            .catch(e => console.error('Error en el GET:', e));
       }
       , []);
 

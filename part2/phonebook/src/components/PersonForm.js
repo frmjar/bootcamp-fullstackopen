@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import {saveContact} from '../services/BBDD';
 
 export const PersonForm = ({
   persons,
@@ -13,7 +13,9 @@ export const PersonForm = ({
   const submitHandler = (evt) => {
     evt.preventDefault();
     if (!alreadyExist()) {
-      setPersons([...persons, {name: newName, number: newNumber}]);
+      setPersons([
+        ...persons,
+        {name: newName, number: newNumber, id: persons.length + 1}]);
       setNewName('');
       setNewNumber('');
       save();
@@ -27,11 +29,10 @@ export const PersonForm = ({
   };
 
   const save = () => {
-    axios.post('http://localhost:3001/persons',
-        {name: newName, number: newNumber})
-         .then(() => console.log('Nuevo registro en la agenda'))
-         .catch((e) => alert(
-             'Ha ocurrido un error al guardar el nuevo contacto'));
+    saveContact(newName, newNumber)
+        .then(() => console.log('Nuevo registro en la agenda'))
+        .catch((e) => alert(
+            'Ha ocurrido un error al guardar el nuevo contacto'));
   };
 
   const changeNameHandler = (evt) => {
