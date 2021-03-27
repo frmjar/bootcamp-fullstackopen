@@ -31,7 +31,7 @@ export const PersonForm = ({
   const save = () => {
     saveContact(newName, newNumber)
         .then(() => console.log('Nuevo registro en la agenda'))
-        .catch((e) => alert(
+        .catch(() => alert(
             'Ha ocurrido un error al guardar el nuevo contacto'));
   };
 
