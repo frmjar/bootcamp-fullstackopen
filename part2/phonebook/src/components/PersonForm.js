@@ -40,9 +40,9 @@ export const PersonForm = ({
   const save = () => {
     saveContact(newName, newNumber)
         .then(() => {
-          setNewNotification(`Added ${newName}`);
+          setNewNotification({message: `Added ${newName}`, type: 'info'});
           setTimeout(() => {
-            setNewNotification('');
+            setNewNotification({});
           }, 3000);
         })
         .catch(() => alert(
@@ -53,13 +53,20 @@ export const PersonForm = ({
     person.number = newNumber;
     updateContact(person)
         .then(() => {
-          setNewNotification(`Updated ${newName}`);
+          setNewNotification({message: `Updated ${newName}`, type: 'info'});
           setTimeout(() => {
-            setNewNotification('');
+            setNewNotification({});
           }, 3000);
         })
-        .catch((e) => console.error(
-            'Ha ocurrido un error al actualizar el contacto', e));
+        .catch(() => {
+          setNewNotification({
+            message: `Information of ${newName} has already been removed from server`,
+            type: 'error',
+          });
+          setTimeout(() => {
+            setNewNotification({});
+          }, 3000);
+        });
   };
 
   const changeNameHandler = (evt) => {

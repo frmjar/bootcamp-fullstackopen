@@ -12,7 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [newFilter, setNewFilter] = useState('');
-  const [newNotification, setNewNotification] = useState('');
+  const [newNotification, setNewNotification] = useState({});
 
   useEffect(() => {
         getAllContacts()
