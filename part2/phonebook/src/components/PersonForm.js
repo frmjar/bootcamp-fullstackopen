@@ -8,6 +8,7 @@ export const PersonForm = ({
   setNewName,
   newNumber,
   setNewNumber,
+  setNewNotification,
 }) => {
 
   const submitHandler = (evt) => {
@@ -24,10 +25,10 @@ export const PersonForm = ({
       const wantUpdate = window.confirm(
           `${person.name} is already added to phonebook, replace the old number with a new one?`);
       if (wantUpdate) {
-        update(person)
-        let auxPersons = persons
-        auxPersons[person.id-1].number = person.number
-        setPersons(auxPersons)
+        update(person);
+        let auxPersons = persons;
+        auxPersons[person.id - 1].number = person.number;
+        setPersons(auxPersons);
       }
     }
 
@@ -38,7 +39,12 @@ export const PersonForm = ({
 
   const save = () => {
     saveContact(newName, newNumber)
-        .then(() => console.log('Nuevo registro en la agenda'))
+        .then(() => {
+          setNewNotification(`Added ${newName}`);
+          setTimeout(() => {
+            setNewNotification('');
+          }, 3000);
+        })
         .catch(() => alert(
             'Ha ocurrido un error al guardar el nuevo contacto'));
   };
@@ -46,7 +52,12 @@ export const PersonForm = ({
   const update = (person) => {
     person.number = newNumber;
     updateContact(person)
-        .then(() => console.log('Contacto modificado correctamente'))
+        .then(() => {
+          setNewNotification(`Updated ${newName}`);
+          setTimeout(() => {
+            setNewNotification('');
+          }, 3000);
+        })
         .catch((e) => console.error(
             'Ha ocurrido un error al actualizar el contacto', e));
   };
