@@ -46,6 +46,12 @@ app.get('/api/persons', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const person = request.body;
+
+  if(!person.name)
+    return response.status(400).json({
+      error: 'content missing'
+    })
+
   person.id = Math.round(Math.random() * 10000);
   persons = [...persons, person];
   response.json(person);
