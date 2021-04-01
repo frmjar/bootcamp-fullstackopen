@@ -24,6 +24,15 @@ const persons = [
   },
 ];
 
+app.get('/info', (request, response) => {
+  const date = new Date();
+  response.send(
+      `<div>
+                <span>Phonebook has info for ${persons.length} people</span>
+                <p>${date.toISOString()} (ISO)</p>
+            </div>`);
+});
+
 app.get('/api/persons', (request, response) => {
   response.json(persons);
 });
