@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL = 'http://localhost:3001/api/persons';
+const URL = 'https://thawing-mesa-23502.herokuapp.com/api/persons';
 
 export const getAllContacts = () => {
   return axios.get(URL).then(response => response.data);
