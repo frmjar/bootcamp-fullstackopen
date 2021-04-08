@@ -71,14 +71,19 @@ app.post('/api/persons', (request, response) => {
       error: 'Name or number missing',
     });
 
-  if (persons.find(per => per.name === person.name))
+  /*if (persons.find(per => per.name === person.name))
     return response.status(409).json({
       error: 'Name must be unique',
-    });
+    });*/
 
-  person.id = Math.round(Math.random() * 10000);
-  persons = [...persons, person];
-  response.json(person);
+  const person_mongo = new Person({
+    name: person.name,
+    number: person.number,
+  });
+
+  person_mongo.save()
+              .then(person => response.json(person))
+              .catch(err => console.error(err));
 });
 
 app.get('/api/persons/:id', (request, response) => {

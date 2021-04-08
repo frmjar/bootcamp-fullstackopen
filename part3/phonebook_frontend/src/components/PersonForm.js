@@ -17,10 +17,8 @@ export const PersonForm = ({
     const person = persons.find((person) => person.name === newName);
 
     if (person === undefined) {
-      save();
-      setPersons([
-        ...persons,
-        {name: newName, number: newNumber, id: persons.length + 1}]);
+      save().then(newContact => setPersons([
+        ...persons, newContact]));
     } else {
       const wantUpdate = window.confirm(
           `${person.name} is already added to phonebook, replace the old number with a new one?`);
@@ -38,12 +36,14 @@ export const PersonForm = ({
   };
 
   const save = () => {
-    saveContact(newName, newNumber)
-        .then(() => {
-          setNewNotification({message: `Added ${newName}`, type: 'info'});
+    return saveContact(newName, newNumber)
+        .then((newContact) => {
+          setNewNotification(
+              {message: `Added ${newContact.name}`, type: 'info'});
           setTimeout(() => {
             setNewNotification({});
           }, 3000);
+          return newContact;
         })
         .catch(() => alert(
             'Ha ocurrido un error al guardar el nuevo contacto'));
