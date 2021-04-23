@@ -66,12 +66,14 @@ app.post('/api/persons', (request, response, next) => {
               });
 });
 
-app.get('/api/persons/:id', (request, response, next) => {
-  const person = persons.find(person => person.id === +request.params.id);
-  if (person)
-    response.json(person);
-  else
-    response.status(404).end();
+app.put('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndUpdate(request.params.id,
+      {$set: {number: request.body.number}}, {new: true})
+        .then(person => response.json(person))
+        .catch(err => {
+          console.error(err);
+          next(err);
+        });
 });
 
 app.delete('/api/persons/:id', (request, response, next) => {

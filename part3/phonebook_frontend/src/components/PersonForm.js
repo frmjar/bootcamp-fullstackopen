@@ -24,9 +24,6 @@ export const PersonForm = ({
           `${person.name} is already added to phonebook, replace the old number with a new one?`);
       if (wantUpdate) {
         update(person);
-        let auxPersons = persons;
-        auxPersons[person.id - 1].number = person.number;
-        setPersons(auxPersons);
       }
     }
 
