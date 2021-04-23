@@ -18,7 +18,7 @@ export const PersonForm = ({
 
     if (person === undefined) {
       save().then(newContact => setPersons([
-        ...persons, newContact]));
+        ...persons, newContact])).catch(err => console.log(err));
     } else {
       const wantUpdate = window.confirm(
           `${person.name} is already added to phonebook, replace the old number with a new one?`);
@@ -45,8 +45,11 @@ export const PersonForm = ({
           }, 3000);
           return newContact;
         })
-        .catch(() => alert(
-            'Ha ocurrido un error al guardar el nuevo contacto'));
+        .catch(() => {
+          alert('Ha ocurrido un error al guardar el nuevo contacto');
+          return Promise.reject(
+              new Error('Ha ocurrido un error al guardar el nuevo contacto'));
+        });
   };
 
   const update = (person) => {

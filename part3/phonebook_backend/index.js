@@ -29,15 +29,18 @@ app.get('/info', (request, response) => {
             </div>`);
 });
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
 
   Person.find()
         .then(result => response.json(result))
-        .catch(err => console.error(err));
+        .catch(err => {
+          console.error(err);
+          next(err);
+        });
 
 });
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const person = request.body;
 
   if (!person.name || !person.number)
@@ -57,10 +60,13 @@ app.post('/api/persons', (request, response) => {
 
   person_mongo.save()
               .then(person => response.json(person))
-              .catch(err => console.error(err));
+              .catch(err => {
+                console.error(err);
+                next(err);
+              });
 });
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const person = persons.find(person => person.id === +request.params.id);
   if (person)
     response.json(person);
@@ -68,13 +74,23 @@ app.get('/api/persons/:id', (request, response) => {
     response.status(404).end();
 });
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   Person.deleteOne({'_id': request.params.id})
         .then(() => response.status(204).end())
         .catch(err => {
           console.error(err);
-          response.status(500).send('Error al borrar persona').end();
+          next(err);
         });
+});
+
+app.use((error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({error: 'malformatted id'});
+  }
+
+  next(error);
 });
 
 const PORT = process.env.PORT || 3001;
