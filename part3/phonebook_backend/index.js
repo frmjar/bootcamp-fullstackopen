@@ -18,13 +18,12 @@ morgan.token('data', (req) => {
 app.use(morgan(
     ':method :url :status :res[content-length] - :response-time ms :data'));
 
-let persons = [];
-
-app.get('/info', (request, response) => {
+app.get('/info', async (request, response) => {
   const date = new Date();
+  const countDocuments = await Person.estimatedDocumentCount();
   response.send(
       `<div>
-                <span>Phonebook has info for ${persons.length} people</span>
+                <span>Phonebook has info for ${countDocuments} people</span>
                 <p>${date.toISOString()} (ISO)</p>
             </div>`);
 });
@@ -64,6 +63,15 @@ app.post('/api/persons', (request, response, next) => {
                 console.error(err);
                 next(err);
               });
+});
+
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+        .then(person => response.json(person))
+        .catch(err => {
+          console.error(err);
+          next(err);
+        });
 });
 
 app.put('/api/persons/:id', (request, response, next) => {
