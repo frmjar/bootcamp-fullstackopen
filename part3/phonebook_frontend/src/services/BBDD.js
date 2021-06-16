@@ -8,7 +8,8 @@ export const getAllContacts = () => {
 
 export const saveContact = (name, number) => {
   return axios.post(URL, {name: name, number: number})
-              .then(response => response.data);
+              .then(response => response.data)
+              .catch(err => Promise.reject(err.response.data.error));
 };
 
 export const deleteContact = (id) => {

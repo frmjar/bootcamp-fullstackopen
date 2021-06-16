@@ -42,10 +42,9 @@ export const PersonForm = ({
           }, 3000);
           return newContact;
         })
-        .catch(() => {
-          alert('Ha ocurrido un error al guardar el nuevo contacto');
-          return Promise.reject(
-              new Error('Ha ocurrido un error al guardar el nuevo contacto'));
+        .catch((err) => {
+          alert(err);
+          return Promise.reject(new Error(err));
         });
   };
 

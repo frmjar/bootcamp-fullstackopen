@@ -60,8 +60,14 @@ app.post('/api/persons', (request, response, next) => {
   person_mongo.save()
               .then(person => response.json(person))
               .catch(err => {
-                console.error(err);
-                next(err);
+                if (err.name === 'ValidationError') {
+                  return response.status(409).json({
+                    error: err.message,
+                  });
+                } else {
+                  console.error(err);
+                  next(err);
+                }
               });
 });
 
