@@ -1,13 +1,12 @@
-export const Filter = ({newFilter, setNewFilter}) => {
-
+export const Filter = ({ newFilter, setNewFilter }) => {
   const changeHandler = (evt) => {
-    setNewFilter(evt.target.value);
-  };
+    setNewFilter(evt.target.value)
+  }
 
   return (
-      <div>
-        <span>Filter shown with</span>
-        <input onChange={changeHandler} value={newFilter}/>
-      </div>
-  );
-};
+    <div>
+      <span>Filter shown with</span>
+      <input onChange={changeHandler} value={newFilter} />
+    </div>
+  )
+}

@@ -1,5 +1,5 @@
-import React from 'react';
-import {saveContact, updateContact} from '../services/BBDD';
+import React from 'react'
+import { saveContact, updateContact } from '../services/BBDD'
 
 export const PersonForm = ({
   persons,
@@ -8,88 +8,86 @@ export const PersonForm = ({
   setNewName,
   newNumber,
   setNewNumber,
-  setNewNotification,
+  setNewNotification
 }) => {
-
   const submitHandler = (evt) => {
-    evt.preventDefault();
+    evt.preventDefault()
 
-    const person = persons.find((person) => person.name === newName);
+    const person = persons.find((person) => person.name === newName)
 
     if (person === undefined) {
       save().then(newContact => setPersons([
-        ...persons, newContact])).catch(err => console.log(err));
+        ...persons, newContact])).catch(err => console.log(err))
     } else {
       const wantUpdate = window.confirm(
-          `${person.name} is already added to phonebook, replace the old number with a new one?`);
+          `${person.name} is already added to phonebook, replace the old number with a new one?`)
       if (wantUpdate) {
-        update(person);
+        update(person)
       }
     }
 
-    setNewName('');
-    setNewNumber('');
-
-  };
+    setNewName('')
+    setNewNumber('')
+  }
 
   const save = () => {
     return saveContact(newName, newNumber)
-        .then((newContact) => {
-          setNewNotification(
-              {message: `Added ${newContact.name}`, type: 'info'});
-          setTimeout(() => {
-            setNewNotification({});
-          }, 3000);
-          return newContact;
-        })
-        .catch((err) => {
-          setNewNotification(
-              {message: err, type: 'error'});
-          return Promise.reject(new Error(err));
-        });
-  };
+      .then((newContact) => {
+        setNewNotification(
+          { message: `Added ${newContact.name}`, type: 'info' })
+        setTimeout(() => {
+          setNewNotification({})
+        }, 3000)
+        return newContact
+      })
+      .catch((err) => {
+        setNewNotification(
+          { message: err, type: 'error' })
+        return Promise.reject(new Error(err))
+      })
+  }
 
   const update = (person) => {
-    person.number = newNumber;
+    person.number = newNumber
     updateContact(person)
-        .then(() => {
-          setNewNotification({message: `Updated ${newName}`, type: 'info'});
-          setTimeout(() => {
-            setNewNotification({});
-          }, 3000);
+      .then(() => {
+        setNewNotification({ message: `Updated ${newName}`, type: 'info' })
+        setTimeout(() => {
+          setNewNotification({})
+        }, 3000)
+      })
+      .catch(() => {
+        setNewNotification({
+          message: `Information of ${newName} has already been removed from server`,
+          type: 'error'
         })
-        .catch(() => {
-          setNewNotification({
-            message: `Information of ${newName} has already been removed from server`,
-            type: 'error',
-          });
-          setTimeout(() => {
-            setNewNotification({});
-          }, 3000);
-        });
-  };
+        setTimeout(() => {
+          setNewNotification({})
+        }, 3000)
+      })
+  }
 
   const changeNameHandler = (evt) => {
-    setNewName(evt.target.value);
-  };
+    setNewName(evt.target.value)
+  }
 
   const changeNumberHandler = (evt) => {
-    setNewNumber(evt.target.value);
-  };
+    setNewNumber(evt.target.value)
+  }
 
   return (
-      <form onSubmit={submitHandler}>
-        <div>
-          <label>name: </label>
-          <input onChange={changeNameHandler} value={newName}/>
-        </div>
-        <div>
-          <label>number: </label>
-          <input onChange={changeNumberHandler} value={newNumber}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-  );
-};
+    <form onSubmit={submitHandler}>
+      <div>
+        <label>name: </label>
+        <input onChange={changeNameHandler} value={newName} />
+      </div>
+      <div>
+        <label>number: </label>
+        <input onChange={changeNumberHandler} value={newNumber} />
+      </div>
+      <div>
+        <button type='submit'>add</button>
+      </div>
+    </form>
+  )
+}

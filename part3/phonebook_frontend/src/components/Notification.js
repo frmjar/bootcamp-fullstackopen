@@ -1,15 +1,15 @@
-import '../styles/notification.css';
+import '../styles/notification.css'
 
-export const Notification = ({message}) => {
-  const clase = `notification ${message.type}`;
+export const Notification = ({ message }) => {
+  const clase = `notification ${message.type}`
 
   if (message.message === undefined) {
-    return null;
+    return null
   }
 
   return (
-      <div className={clase}>
-        {message.message}
-      </div>
-  );
-};
+    <div className={clase}>
+      {message.message}
+    </div>
+  )
+}
