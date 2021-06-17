@@ -43,7 +43,8 @@ export const PersonForm = ({
           return newContact;
         })
         .catch((err) => {
-          alert(err);
+          setNewNotification(
+              {message: err, type: 'error'});
           return Promise.reject(new Error(err));
         });
   };

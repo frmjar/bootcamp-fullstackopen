@@ -14,8 +14,19 @@ mongoose.connect(mongo_uri, {
         .catch(err => console.error(err));
 
 const personScheme = new Schema({
-  name: {type: String, required: true, unique: true},
-  number: {type: String, required: true},
+  name:
+      {
+        type: String,
+        required: true,
+        minLength: [3, 'Must be at least 3, got {VALUE}'],
+        unique: true,
+      },
+  number:
+      {
+        type: String,
+        minLength: [8, 'Must be at least 8, got {VALUE}'],
+        required: true,
+      },
 });
 
 personScheme.plugin(uniqueValidator);
