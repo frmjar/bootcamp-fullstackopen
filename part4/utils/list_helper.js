@@ -24,10 +24,26 @@ const mostBlogs = (blogs) => {
   return authorCountBlogs
 }
 
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) return null
+  const authors = _.groupBy(blogs, (blog) => blog.author)
+  const authorCountBlogs = _.transform(authors, (authorCountBlogs, blogs, author) => {
+    const likes = blogs.reduce((likes, blog) => likes + blog.likes, 0)
+
+    if (authorCountBlogs.likes < likes) {
+      authorCountBlogs.likes = likes
+      authorCountBlogs.author = author
+    }
+  }, { likes: 0 })
+
+  return authorCountBlogs
+}
+
 module.exports =
   {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
   }
