@@ -1,73 +1,41 @@
 const listHelper = require('../utils/list_helper')
+const blogs = require('./list_blogs_tests')
 
 test('dummy returns one', () => {
-  const blogs = []
-
-  const result = listHelper.dummy(blogs)
+  const result = listHelper.dummy(blogs.listEmpty)
   expect(result).toBe(1)
 })
 
 describe('total likes', () => {
-  const listEmpty = []
-
-  const listWithOneBlog = [
-    {
-      _id: '5a422aa71b54a676234d17f8',
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-      likes: 5,
-      __v: 0
-    }
-  ]
-
-  const listWithManyBlogs = [
-    {
-      _id: '5a422aa71b54a676254d17f8',
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-      likes: 5,
-      __v: 0
-    },
-    {
-      _id: '5a422aa71b54a676264d17f8',
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-      likes: 2,
-      __v: 0
-    },
-    {
-      _id: '5a422aa71b54a676274d17f8',
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-      likes: 7,
-      __v: 0
-    },
-    {
-      _id: '5a422aa71b54a676238d17f8',
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-      likes: 3,
-      __v: 0
-    }
-  ]
-
   test('when list is empty, likes equals 0', () => {
-    const result = listHelper.totalLikes(listEmpty)
+    const result = listHelper.totalLikes(blogs.listEmpty)
     expect(result).toBe(0)
   })
 
   test('when list has only one blog, equals the likes of that', () => {
-    const result = listHelper.totalLikes(listWithOneBlog)
+    const result = listHelper.totalLikes(blogs.listWithOneBlog)
     expect(result).toBe(5)
   })
 
   test('when list has many blogs, equals likes that sum', () => {
-    const result = listHelper.totalLikes(listWithManyBlogs)
+    const result = listHelper.totalLikes(blogs.listWithManyBlogs)
     expect(result).toBe(17)
+  })
+})
+
+describe('favorite blog', () => {
+  test('when list is empty, likes null', () => {
+    const result = listHelper.favoriteBlog(blogs.listEmpty)
+    expect(result).toBe(null)
+  })
+
+  test('when list has only one blog, equals the likes of that', () => {
+    const result = listHelper.favoriteBlog(blogs.listWithOneBlog)
+    expect(result).toEqual(blogs.listWithOneBlog[0])
+  })
+
+  test('when list has many blogs, equals the most likes blog', () => {
+    const result = listHelper.favoriteBlog(blogs.listWithManyBlogs)
+    expect(result).toEqual(blogs.favoriteBlog)
   })
 })
