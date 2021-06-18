@@ -6,10 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "devDependencies": {
-    "nodemon": "2.0.7"
+    "lint": "eslint .",
+    "test": "jest --verbose",
+    "test-watch": "npm run test -- --watch"
   },
   "author": "",
   "license": "ISC",
@@ -19,5 +18,22 @@
     "express": "4.17.1",
     "http": "0.0.1-security",
     "mongoose": "5.12.14"
+  },
+  "devDependencies": {
+    "jest": "27.0.4",
+    "nodemon": "2.0.7",
+    "standard": "16.0.3"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/standard/eslintrc.json",
+    "rules": {
+      "camelcase": "off"
+    },
+    "env": {
+      "jest": true
+  }
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
