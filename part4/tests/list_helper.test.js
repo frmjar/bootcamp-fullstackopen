@@ -19,7 +19,7 @@ describe('total likes', () => {
 
   test('when list has many blogs, equals likes that sum', () => {
     const result = listHelper.totalLikes(blogs.listWithManyBlogs)
-    expect(result).toBe(17)
+    expect(result).toBe(20)
   })
 })
 
@@ -49,5 +49,10 @@ describe('author with most blogs', () => {
   test('when list has only one blog, equals the author of that', () => {
     const result = listHelper.mostBlogs(blogs.listWithOneBlog)
     expect(result).toEqual({ author: 'Edsger W. Dijkstra', blogs: 1 })
+  })
+
+  test('when list has many blogs, equals the author with most blogs', () => {
+    const result = listHelper.mostBlogs(blogs.listWithManyBlogs)
+    expect(result).toEqual({ author: 'Edsger Dijkstra', blogs: 3 })
   })
 })
