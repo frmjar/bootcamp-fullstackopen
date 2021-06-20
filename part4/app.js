@@ -21,4 +21,4 @@ app.use(express.json())
 
 app.use('/api/blogs', blogRoutes)
 
-module.exports = app
+module.exports = { app, mongoose }

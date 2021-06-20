@@ -1,12 +1,12 @@
 const listHelper = require('../utils/list_helper')
 const blogs = require('./list_blogs_tests')
 
-test('dummy returns one', () => {
+test.skip('dummy returns one', () => {
   const result = listHelper.dummy(blogs.listEmpty)
   expect(result).toBe(1)
 })
 
-describe('total likes', () => {
+describe.skip('total likes', () => {
   test('when list is empty, likes equals 0', () => {
     const result = listHelper.totalLikes(blogs.listEmpty)
     expect(result).toBe(0)
@@ -23,7 +23,7 @@ describe('total likes', () => {
   })
 })
 
-describe('favorite blog', () => {
+describe.skip('favorite blog', () => {
   test('when list is empty, likes null', () => {
     const result = listHelper.favoriteBlog(blogs.listEmpty)
     expect(result).toBe(null)
@@ -40,7 +40,7 @@ describe('favorite blog', () => {
   })
 })
 
-describe('author with most blogs', () => {
+describe.skip('author with most blogs', () => {
   test('when list is empty, author is null', () => {
     const result = listHelper.mostBlogs(blogs.listEmpty)
     expect(result).toBe(null)
@@ -57,7 +57,7 @@ describe('author with most blogs', () => {
   })
 })
 
-describe('author with most likes', () => {
+describe.skip('author with most likes', () => {
   test('when list is empty, author is null', () => {
     const result = listHelper.mostLikes(blogs.listEmpty)
     expect(result).toBe(null)
