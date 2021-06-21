@@ -1,7 +1,7 @@
 const { app, mongoose } = require('../app')
 const supertest = require('supertest')
 const Blog = require('../models/blog')
-const { listBlogs } = require('./list_blogs_tests')
+const { listBlogs, blogToAdd } = require('./list_blogs_tests')
 
 const api = supertest(app)
 
@@ -34,6 +34,42 @@ describe('Probando GET /api/blogs', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
     expect(response.body[0].id).toBeDefined()
+  })
+})
+
+describe('Probando POST /api/blogs', () => {
+  test('coleccion vacia', async () => {
+    await Blog.deleteMany({})
+
+    await api.post('/api/blogs')
+      .send(blogToAdd)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body).toHaveLength(1)
+
+    const titles = response.body.map(blog => blog.title)
+    expect(titles).toContain(blogToAdd.title)
+  })
+
+  test('coleccion llena', async () => {
+    await api.post('/api/blogs')
+      .send(blogToAdd)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body).toHaveLength(listBlogs.length + 1)
+
+    const titles = response.body.map(blog => blog.title)
+    expect(titles).toContain(blogToAdd.title)
   })
 })
 

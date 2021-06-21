@@ -96,11 +96,19 @@ const listBlogs = [
   }
 ]
 
+const blogToAdd = {
+  title: 'Nuevo blog anadido',
+  author: 'Edsger Dijkstra',
+  url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+  likes: 7
+}
+
 module.exports =
  {
    listEmpty,
    listWithOneBlog,
    listWithManyBlogs,
    favoriteBlog,
-   listBlogs
+   listBlogs,
+   blogToAdd
  }
