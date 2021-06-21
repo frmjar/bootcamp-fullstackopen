@@ -71,6 +71,23 @@ describe('Probando POST /api/blogs', () => {
     const titles = response.body.map(blog => blog.title)
     expect(titles).toContain(blogToAdd.title)
   })
+
+  test('if likes is undefiden, expect likes equal 0', async () => {
+    delete blogToAdd.likes
+    await api.post('/api/blogs')
+      .send(blogToAdd)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body).toHaveLength(listBlogs.length + 1)
+
+    const titles = response.body.find(blog => blog.title === blogToAdd.title)
+    expect(titles.likes).toBe(0)
+  })
 })
 
 afterAll(() => mongoose.connection.close())
