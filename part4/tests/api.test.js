@@ -28,6 +28,13 @@ describe('Probando GET /api/blogs', () => {
       .expect('Content-Type', /application\/json/)
     expect(response.body).toHaveLength(listBlogs.length)
   })
+
+  test('verificacion id', async () => {
+    const response = await api.get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    expect(response.body[0].id).toBeDefined()
+  })
 })
 
 afterAll(() => mongoose.connection.close())
