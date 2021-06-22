@@ -72,7 +72,7 @@ describe('Probando POST /api/blogs', () => {
     expect(titles).toContain(blogToAdd.title)
   })
 
-  test('if likes is undefiden, expect likes equal 0', async () => {
+  test('if likes is undefined, expect likes equal 0', async () => {
     delete blogToAdd.likes
     await api.post('/api/blogs')
       .send(blogToAdd)
@@ -87,6 +87,23 @@ describe('Probando POST /api/blogs', () => {
 
     const titles = response.body.find(blog => blog.title === blogToAdd.title)
     expect(titles.likes).toBe(0)
+  })
+
+  test('if title or url is undefined, expect error 400', async () => {
+    delete blogToAdd.title
+    delete blogToAdd.url
+    const error = await api.post('/api/blogs')
+      .send(blogToAdd)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(error.body.error).toBe('title or url missing')
+
+    const response = await api.get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body).toHaveLength(listBlogs.length)
   })
 })
 
