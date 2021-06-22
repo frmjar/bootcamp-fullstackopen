@@ -110,9 +110,9 @@ describe.skip('Probando POST /api/blogs', () => {
 describe('Probando DELETE /api/blogs', () => {
   test('delete 1 blog', async () => {
     const blogs = await api.get('/api/blogs')
+    const blog = blogs.body[0]
 
-    await api.delete(`/api/blogs/${blogs.body[0].id}`)
-      .send(blogToAdd)
+    await api.delete(`/api/blogs/${blog.id}`)
       .expect(204)
 
     const response = await api.get('/api/blogs')
@@ -122,7 +122,31 @@ describe('Probando DELETE /api/blogs', () => {
     expect(response.body).toHaveLength(listBlogs.length - 1)
 
     const titles = response.body.map(blog => blog.id)
-    expect(titles).not.toContain(blogs.body[0].id)
+    expect(titles).not.toContain(blog.id)
+  })
+})
+
+describe('Probando PUT /api/blogs', () => {
+  test('modify 1 blog', async () => {
+    const blogs = await api.get('/api/blogs')
+    const [blog] = blogs.body
+    const blogToModify = { ...blog, likes: blog.likes * 2 }
+
+    const res = await api.put(`/api/blogs/${blog.id}`)
+      .send(blogToModify)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(res.body.likes).toBe(blog.likes)
+
+    const response = await api.get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body).toHaveLength(listBlogs.length)
+
+    const blogModify = response.body.find(blogR => blogR.id === blogToModify.id)
+    expect(blogModify.likes).toBe(blogToModify.likes)
   })
 })
 
