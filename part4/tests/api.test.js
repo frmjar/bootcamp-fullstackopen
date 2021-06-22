@@ -13,7 +13,7 @@ beforeEach(async () => {
   await Promise.all(blogsSave)
 })
 
-describe('Probando GET /api/blogs', () => {
+describe.skip('Probando GET /api/blogs', () => {
   test('coleccion vacia', async () => {
     await Blog.deleteMany({})
     const response = await api.get('/api/blogs')
@@ -37,7 +37,7 @@ describe('Probando GET /api/blogs', () => {
   })
 })
 
-describe('Probando POST /api/blogs', () => {
+describe.skip('Probando POST /api/blogs', () => {
   test('coleccion vacia', async () => {
     await Blog.deleteMany({})
 
@@ -104,6 +104,25 @@ describe('Probando POST /api/blogs', () => {
       .expect('Content-Type', /application\/json/)
 
     expect(response.body).toHaveLength(listBlogs.length)
+  })
+})
+
+describe('Probando DELETE /api/blogs', () => {
+  test('delete 1 blog', async () => {
+    const blogs = await api.get('/api/blogs')
+
+    await api.delete(`/api/blogs/${blogs.body[0].id}`)
+      .send(blogToAdd)
+      .expect(204)
+
+    const response = await api.get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body).toHaveLength(listBlogs.length - 1)
+
+    const titles = response.body.map(blog => blog.id)
+    expect(titles).not.toContain(blogs.body[0].id)
   })
 })
 

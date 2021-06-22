@@ -9,7 +9,8 @@ blogRoutes.get('/', async (request, response) => {
 
 blogRoutes.post('/', async (request, response) => {
   const blog = new Blog(request.body)
-
+  console.info(blog.title)
+  console.info(blog.url)
   if (_.isUndefined(blog.title) || _.isUndefined(blog.url)) {
     return response.status(400).json({ error: 'title or url missing' })
   }
@@ -18,6 +19,11 @@ blogRoutes.post('/', async (request, response) => {
 
   const result = await blog.save()
   response.status(201).json(result)
+})
+
+blogRoutes.delete('/:id', async (request, response) => {
+  await Blog.deleteOne({ _id: request.params.id })
+  response.status(204).end()
 })
 
 module.exports = blogRoutes
