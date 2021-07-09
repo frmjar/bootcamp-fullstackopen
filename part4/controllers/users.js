@@ -9,13 +9,16 @@ usersRoutes.get('/', async (request, response) => {
 })
 
 usersRoutes.post('/', async (request, response) => {
-  const user = new User(request.body)
+  const userBody = request.body
 
-  if (_.isUndefined(user.username) || _.isUndefined(user.password)) {
+  if (_.isUndefined(userBody.username) || _.isUndefined(userBody.password)) {
     return response.status(400).json({ error: 'username or password undefined' })
   }
 
-  user.passwordHash = await bcrypt.hash(user.passwordHash, 10)
+  userBody.password = await bcrypt.hash(userBody.password, 10)
+
+  const user = new User(userBody)
+  user.passwordHash = userBody.password
 
   const result = await user.save()
   response.status(201).json(result)

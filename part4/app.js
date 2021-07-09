@@ -1,11 +1,14 @@
 const express = require('express')
-const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
+require('express-async-errors')
 const blogRoutes = require('./controllers/blogs')
 const userRoutes = require('./controllers/users')
 const { mongoUrl } = require('./utils/config')
 const logger = require('./utils/logger')
+const middleware = require('./utils/middleware')
+
+const app = express()
 
 mongoose.connect(mongoUrl,
   {
@@ -22,5 +25,7 @@ app.use(express.json())
 
 app.use('/api/blogs', blogRoutes)
 app.use('/api/users', userRoutes)
+
+app.use(middleware.errorHandler)
 
 module.exports = { app, mongoose }
