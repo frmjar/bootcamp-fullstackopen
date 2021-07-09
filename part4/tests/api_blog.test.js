@@ -1,6 +1,7 @@
 const { app, mongoose } = require('../app')
 const supertest = require('supertest')
 const Blog = require('../models/blog')
+const { blogsInMongo } = require('./helpers')
 const { listBlogs, blogToAdd } = require('./list_blogs_tests')
 
 const api = supertest(app)
@@ -46,13 +47,11 @@ describe.skip('Probando POST /api/blogs', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const response = await api.get('/api/blogs')
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
+    const response = await blogsInMongo()
 
-    expect(response.body).toHaveLength(1)
+    expect(response).toHaveLength(1)
 
-    const titles = response.body.map(blog => blog.title)
+    const titles = response.map(blog => blog.title)
     expect(titles).toContain(blogToAdd.title)
   })
 
@@ -62,13 +61,10 @@ describe.skip('Probando POST /api/blogs', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const response = await api.get('/api/blogs')
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
+    const response = await blogsInMongo()
+    expect(response).toHaveLength(listBlogs.length + 1)
 
-    expect(response.body).toHaveLength(listBlogs.length + 1)
-
-    const titles = response.body.map(blog => blog.title)
+    const titles = response.map(blog => blog.title)
     expect(titles).toContain(blogToAdd.title)
   })
 
@@ -79,13 +75,10 @@ describe.skip('Probando POST /api/blogs', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const response = await api.get('/api/blogs')
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
+    const response = await blogsInMongo()
+    expect(response).toHaveLength(listBlogs.length + 1)
 
-    expect(response.body).toHaveLength(listBlogs.length + 1)
-
-    const titles = response.body.find(blog => blog.title === blogToAdd.title)
+    const titles = response.find(blog => blog.title === blogToAdd.title)
     expect(titles.likes).toBe(0)
   })
 
@@ -99,15 +92,12 @@ describe.skip('Probando POST /api/blogs', () => {
 
     expect(error.body.error).toBe('title or url missing')
 
-    const response = await api.get('/api/blogs')
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
-
-    expect(response.body).toHaveLength(listBlogs.length)
+    const response = await blogsInMongo()
+    expect(response).toHaveLength(listBlogs.length)
   })
 })
 
-describe('Probando DELETE /api/blogs', () => {
+describe.skip('Probando DELETE /api/blogs', () => {
   test('delete 1 blog', async () => {
     const blogs = await api.get('/api/blogs')
     const blog = blogs.body[0]
@@ -115,18 +105,15 @@ describe('Probando DELETE /api/blogs', () => {
     await api.delete(`/api/blogs/${blog.id}`)
       .expect(204)
 
-    const response = await api.get('/api/blogs')
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
+    const response = await blogsInMongo()
+    expect(response).toHaveLength(listBlogs.length - 1)
 
-    expect(response.body).toHaveLength(listBlogs.length - 1)
-
-    const titles = response.body.map(blog => blog.id)
+    const titles = response.map(blog => blog.id)
     expect(titles).not.toContain(blog.id)
   })
 })
 
-describe('Probando PUT /api/blogs', () => {
+describe.skip('Probando PUT /api/blogs', () => {
   test('modify 1 blog', async () => {
     const blogs = await api.get('/api/blogs')
     const [blog] = blogs.body
@@ -139,13 +126,10 @@ describe('Probando PUT /api/blogs', () => {
 
     expect(res.body.likes).toBe(blog.likes)
 
-    const response = await api.get('/api/blogs')
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
+    const response = await blogsInMongo()
+    expect(response).toHaveLength(listBlogs.length)
 
-    expect(response.body).toHaveLength(listBlogs.length)
-
-    const blogModify = response.body.find(blogR => blogR.id === blogToModify.id)
+    const blogModify = response.find(blogR => blogR.id === blogToModify.id)
     expect(blogModify.likes).toBe(blogToModify.likes)
   })
 })

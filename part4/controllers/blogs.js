@@ -9,8 +9,6 @@ blogRoutes.get('/', async (request, response) => {
 
 blogRoutes.post('/', async (request, response) => {
   const blog = new Blog(request.body)
-  console.info(blog.title)
-  console.info(blog.url)
   if (_.isUndefined(blog.title) || _.isUndefined(blog.url)) {
     return response.status(400).json({ error: 'title or url missing' })
   }

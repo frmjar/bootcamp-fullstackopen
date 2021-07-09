@@ -14,6 +14,9 @@ usersRoutes.post('/', async (request, response) => {
   if (_.isUndefined(userBody.username) || _.isUndefined(userBody.password)) {
     return response.status(400).json({ error: 'username or password undefined' })
   }
+  if (userBody.password.length < 3) {
+    return response.status(400).json({ error: 'the password must be at least 3 characters long' })
+  }
 
   userBody.password = await bcrypt.hash(userBody.password, 10)
 
