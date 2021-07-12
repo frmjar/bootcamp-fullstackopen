@@ -1,6 +1,7 @@
 const { app, mongoose } = require('../app')
 const supertest = require('supertest')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const { blogsInMongo } = require('./helpers')
 const { listBlogs, blogToAdd } = require('./list_blogs_tests')
 
@@ -8,13 +9,21 @@ const api = supertest(app)
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  const user = await User.findOne()
+  const blogs = listBlogs.map(blog => {
+    blog.user = user._id
+    return new Blog(blog)
+  })
+  const blogsSavePromise = blogs.map(blog => blog.save())
+  const blogSave = await Promise.all(blogsSavePromise)
 
-  const blogs = listBlogs.map(blog => new Blog(blog))
-  const blogsSave = blogs.map(blog => blog.save())
-  await Promise.all(blogsSave)
+  for (const blog of blogSave) {
+    user.blogs = user.blogs.concat(blog.id)
+    await user.save()
+  }
 })
 
-describe.skip('Probando GET /api/blogs', () => {
+describe('Probando GET /api/blogs', () => {
   test('coleccion vacia', async () => {
     await Blog.deleteMany({})
     const response = await api.get('/api/blogs')
@@ -41,6 +50,8 @@ describe.skip('Probando GET /api/blogs', () => {
 describe.skip('Probando POST /api/blogs', () => {
   test('coleccion vacia', async () => {
     await Blog.deleteMany({})
+    const user = await User.findOne()
+    blogToAdd.user = user._id
 
     await api.post('/api/blogs')
       .send(blogToAdd)
@@ -68,7 +79,7 @@ describe.skip('Probando POST /api/blogs', () => {
     expect(titles).toContain(blogToAdd.title)
   })
 
-  test('if likes is undefined, expect likes equal 0', async () => {
+  test.skip('if likes is undefined, expect likes equal 0', async () => {
     delete blogToAdd.likes
     await api.post('/api/blogs')
       .send(blogToAdd)
@@ -82,7 +93,7 @@ describe.skip('Probando POST /api/blogs', () => {
     expect(titles.likes).toBe(0)
   })
 
-  test('if title or url is undefined, expect error 400', async () => {
+  test.skip('if title or url is undefined, expect error 400', async () => {
     delete blogToAdd.title
     delete blogToAdd.url
     const error = await api.post('/api/blogs')

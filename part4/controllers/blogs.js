@@ -1,9 +1,10 @@
 const blogRoutes = require('express').Router()
 const _ = require('lodash')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 blogRoutes.get('/', async (request, response) => {
-  const blogs = await Blog.find()
+  const blogs = await Blog.find().populate('user')
   response.json(blogs)
 })
 
@@ -15,7 +16,13 @@ blogRoutes.post('/', async (request, response) => {
 
   if (_.isUndefined(blog.likes)) { blog.likes = 0 }
 
+  const user = await User.findOne()
+  blog.user = user._id
+
   const result = await blog.save()
+  user.blogs = user.blogs.concat(result._id)
+  user.save()
+
   response.status(201).json(result)
 })
 
