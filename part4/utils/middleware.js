@@ -1,4 +1,5 @@
 const logger = require('./logger')
+const _ = require('lodash')
 
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message)
@@ -14,6 +15,15 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
+const tokenExtractor = (request, response, next) => {
+  const token = request.get('authorization')
+  const extractToken = _.isNil(token) || !token.toLowerCase().startsWith('bearer ') ? null : token.substring(7)
+  request.token = extractToken
+
+  next()
+}
+
 module.exports = {
-  errorHandler
+  errorHandler,
+  tokenExtractor
 }
