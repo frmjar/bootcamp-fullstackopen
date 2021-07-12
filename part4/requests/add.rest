@@ -5,6 +5,7 @@ Content-Type: application/json
 
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWM0M2VjMTNiY2E5NDhjMjE0OWUyYyIsInVzZXJuYW1lIjoicmFzZSIsImlhdCI6MTYyNjA5NjYzNn0.veBkAi4hJzeliCuowytqn7hp2aFPT6dmAp9OeJK2EWk
 
 {
   "title": "El Jorobado de Notre Dam",
