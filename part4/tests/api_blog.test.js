@@ -2,7 +2,7 @@ const { app, mongoose } = require('../app')
 const supertest = require('supertest')
 const Blog = require('../models/blog')
 const User = require('../models/user')
-const { blogsInMongo } = require('./helpers')
+const { blogsInMongo, userLoggingIn } = require('./helpers')
 const { listBlogs, blogToAdd } = require('./list_blogs_tests')
 
 const api = supertest(app)
@@ -23,7 +23,7 @@ beforeEach(async () => {
   }
 })
 
-describe('Probando GET /api/blogs', () => {
+describe.skip('Probando GET /api/blogs', () => {
   test('coleccion vacia', async () => {
     await Blog.deleteMany({})
     const response = await api.get('/api/blogs')
@@ -53,8 +53,11 @@ describe.skip('Probando POST /api/blogs', () => {
     const user = await User.findOne()
     blogToAdd.user = user._id
 
+    const userToken = userLoggingIn(user)
+
     await api.post('/api/blogs')
       .send(blogToAdd)
+      .set('Authorization', `Bearer ${userToken}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -67,8 +70,14 @@ describe.skip('Probando POST /api/blogs', () => {
   })
 
   test('coleccion llena', async () => {
+    const user = await User.findOne()
+    blogToAdd.user = user._id
+
+    const userToken = userLoggingIn(user)
+
     await api.post('/api/blogs')
       .send(blogToAdd)
+      .set('Authorization', `Bearer ${userToken}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -79,10 +88,17 @@ describe.skip('Probando POST /api/blogs', () => {
     expect(titles).toContain(blogToAdd.title)
   })
 
-  test.skip('if likes is undefined, expect likes equal 0', async () => {
+  test('if likes is undefined, expect likes equal 0', async () => {
     delete blogToAdd.likes
+
+    const user = await User.findOne()
+    blogToAdd.user = user._id
+
+    const userToken = userLoggingIn(user)
+
     await api.post('/api/blogs')
       .send(blogToAdd)
+      .set('Authorization', `Bearer ${userToken}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -93,15 +109,38 @@ describe.skip('Probando POST /api/blogs', () => {
     expect(titles.likes).toBe(0)
   })
 
-  test.skip('if title or url is undefined, expect error 400', async () => {
+  test('if title or url is undefined, expect error 400', async () => {
     delete blogToAdd.title
     delete blogToAdd.url
+
+    const user = await User.findOne()
+    blogToAdd.user = user._id
+
+    const userToken = userLoggingIn(user)
+
     const error = await api.post('/api/blogs')
       .send(blogToAdd)
+      .set('Authorization', `Bearer ${userToken}`)
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
     expect(error.body.error).toBe('title or url missing')
+
+    const response = await blogsInMongo()
+    expect(response).toHaveLength(listBlogs.length)
+  })
+
+  // test if Authorization is empty, expect error 401
+  test('if Authorization is empty, expect error 401', async () => {
+    const user = await User.findOne()
+    blogToAdd.user = user._id
+
+    const error = await api.post('/api/blogs')
+      .send(blogToAdd)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+
+    expect(error.body.error).toBe('invalid token')
 
     const response = await blogsInMongo()
     expect(response).toHaveLength(listBlogs.length)
@@ -113,7 +152,13 @@ describe.skip('Probando DELETE /api/blogs', () => {
     const blogs = await api.get('/api/blogs')
     const blog = blogs.body[0]
 
+    const user = await User.findOne()
+    blogToAdd.user = user._id
+
+    const userToken = userLoggingIn(user)
+
     await api.delete(`/api/blogs/${blog.id}`)
+      .set('Authorization', `Bearer ${userToken}`)
       .expect(204)
 
     const response = await blogsInMongo()
@@ -126,8 +171,7 @@ describe.skip('Probando DELETE /api/blogs', () => {
 
 describe.skip('Probando PUT /api/blogs', () => {
   test('modify 1 blog', async () => {
-    const blogs = await api.get('/api/blogs')
-    const [blog] = blogs.body
+    const [blog] = await blogsInMongo()
     const blogToModify = { ...blog, likes: blog.likes * 2 }
 
     const res = await api.put(`/api/blogs/${blog.id}`)
@@ -135,6 +179,7 @@ describe.skip('Probando PUT /api/blogs', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
+    console.log(res.body)
     expect(res.body.likes).toBe(blog.likes)
 
     const response = await blogsInMongo()

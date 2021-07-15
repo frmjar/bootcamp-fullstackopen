@@ -69,6 +69,4 @@ blogRoutes.delete('/:id', async (request, response) => {
   response.status(204).end()
 })
 
-// delete blog only if the user is allowed
-
 module.exports = blogRoutes
