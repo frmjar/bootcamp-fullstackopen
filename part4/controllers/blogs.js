@@ -40,8 +40,35 @@ blogRoutes.put('/:id', async (request, response) => {
 })
 
 blogRoutes.delete('/:id', async (request, response) => {
-  await Blog.deleteOne({ _id: request.params.id })
+  const tokenDesencrypted = jwt.verify(request.token, JWT_SECRET)
+
+  if (!tokenDesencrypted.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+
+  const blogPromise = Blog.findById(request.params.id)
+  const userPromise = User.findById(tokenDesencrypted.id)
+
+  const [blog, user] = await Promise.all([blogPromise, userPromise])
+
+  if (!blog) {
+    return response.status(404).json({ error: 'blog not found' })
+  }
+
+  if (blog.user.toString() !== user.id.toString()) {
+    return response.status(401).json({ error: 'you cannot delete this blog' })
+  }
+
+  user.blogs = _.without(user.blogs, blog._id)
+
+  const blogRemovePromise = blog.remove()
+  const userBlogPromise = user.save()
+
+  await Promise.all([blogRemovePromise, userBlogPromise])
+
   response.status(204).end()
 })
+
+// delete blog only if the user is allowed
 
 module.exports = blogRoutes
