@@ -1,19 +1,29 @@
 import React from 'react'
 import { login } from '../services/login'
 
-const Login = ({ username, password, setUsername, setPassword, setUser }) => {
+const Login = ({ username, password, setUsername, setPassword, setUser, setNotification }) => {
   const handleSubmit = (event) => {
     event.preventDefault()
+
     setUsername(username)
     setPassword(password)
+
     login(username, password).then((user) => {
       console.log('login success')
       setUsername('')
       setPassword('')
       setUser(user)
       window.localStorage.setItem('user', JSON.stringify(user))
+      setNotification({
+        message: `${user.name} successfully logged in`,
+        type: 'success'
+      })
     }).catch((error) => {
-      console.log(error)
+      console.log(error.response.data.error)
+      setNotification({
+        message: error.response.data.error,
+        type: 'error'
+      })
     })
   }
 
