@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blogs from './components/Blogs'
+import BlogForm from './components/BlogForm'
 import Login from './components/Login'
 import Logout from './components/Logout'
 import blogService from './services/blogs'
@@ -29,7 +30,7 @@ const App = () => {
           username={username} password={password}
           setUsername={setUsername} setPassword={setPassword} setUser={setUser}
         />
-      : <div><Logout name={user.name} /> <Blogs blogs={blogs} /> </div>
+      : <div><Logout name={user.name} setUser={setUser} /> <BlogForm token={user.token} blogs={blogs} setBlogs={setBlogs} /> <Blogs blogs={blogs} /> </div>
 
   )
 }

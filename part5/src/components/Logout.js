@@ -1,7 +1,7 @@
-const Logout = ({ name }) => {
-  console.log(name)
+const Logout = ({ name, setUser }) => {
   const logout = () => {
     window.localStorage.removeItem('user')
+    setUser(null)
     window.location.reload()
   }
 
