@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import Blogs from './components/Blogs'
 import Login from './components/Login'
+import Logout from './components/Logout'
 import blogService from './services/blogs'
 
 const App = () => {
@@ -15,23 +16,22 @@ const App = () => {
     )
   }, [])
 
-  if (user === null) {
-    return (
-      <Login
-        username={username} password={password}
-        setUsername={setUsername} setPassword={setPassword} setUser={setUser}
-      />
-    )
-  } else {
-    return (
-      <div>
-        <h2>blogs</h2>
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
-        )}
-      </div>
-    )
-  }
+  useEffect(() => {
+    const usr = window.localStorage.getItem('user')
+    if (usr) {
+      setUser(JSON.parse(usr))
+    }
+  }, [])
+
+  return (
+    user === null
+      ? <Login
+          username={username} password={password}
+          setUsername={setUsername} setPassword={setPassword} setUser={setUser}
+        />
+      : <div><Logout name={user.name} /> <Blogs blogs={blogs} /> </div>
+
+  )
 }
 
 export default App

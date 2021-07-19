@@ -11,6 +11,7 @@ const Login = ({ username, password, setUsername, setPassword, setUser }) => {
       setUsername('')
       setPassword('')
       setUser(user)
+      window.localStorage.setItem('user', JSON.stringify(user))
     }).catch((error) => {
       console.log(error)
     })
