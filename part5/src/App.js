@@ -16,9 +16,10 @@ const App = () => {
   const toggleRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
+      blogs.sort((blogA, blogB) => blogA.likes < blogB.likes)
       setBlogs(blogs)
-    )
+    })
   }, [])
 
   useEffect(() => {
