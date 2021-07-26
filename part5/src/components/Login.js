@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { login } from '../services/login'
 
-const Login = ({ username, password, setUsername, setPassword, setUser, setNotification }) => {
+const Login = ({ setUser, setNotification }) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
   const handleSubmit = (event) => {
     event.preventDefault()
 

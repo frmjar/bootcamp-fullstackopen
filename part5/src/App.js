@@ -1,18 +1,19 @@
 /* eslint-disable react/jsx-closing-tag-location */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blogs from './components/Blogs'
 import BlogForm from './components/BlogForm'
 import Login from './components/Login'
 import Logout from './components/Logout'
 import Alerts from './components/Alerts'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [alert, setAlert] = useState({})
+
+  const toggleRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -35,25 +36,24 @@ const App = () => {
   }
 
   return (
+    <>
+      <Alerts alert={alert} />
 
-    user === null
-      ? <div>
-        <Alerts alert={alert} />
-        <Login
-          username={username} password={password}
-          setUsername={setUsername} setPassword={setPassword} setUser={setUser}
-          setNotification={setNotifications}
-        />
-      </div>
-      : <div>
-        <Alerts alert={alert} />
-        <Logout name={user.name} setUser={setUser} />
-        <BlogForm
-          token={user.token} blogs={blogs} setBlogs={setBlogs}
-          setNotification={setNotifications}
-        />
-        <Blogs blogs={blogs} />
-      </div>
+      {user === null
+        ? <Login
+            setUser={setUser} setNotification={setNotifications}
+          />
+        : <>
+          <Logout name={user.name} setUser={setUser} />
+          <Togglable titleButton='Create new blog' ref={toggleRef}>
+            <BlogForm
+              token={user.token} blogs={blogs} setBlogs={setBlogs}
+              setNotification={setNotifications} toggleRef={toggleRef}
+            />
+          </Togglable>
+          <Blogs blogs={blogs} />
+        </>}
+    </>
 
   )
 }
