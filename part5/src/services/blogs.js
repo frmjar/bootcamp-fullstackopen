@@ -11,4 +11,14 @@ const save = (blog, token) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, save }
+const updateBlog = (blog) => {
+  console.log(blog)
+  const request = axios.put(`${baseUrl}/${blog.id}`, blog)
+  return request.then(response => response.data)
+}
+
+export default {
+  getAll,
+  save,
+  updateBlog
+}
