@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
-const Blog = ({ blog }) => {
+const Blog = ({ blog, addLike, removeBlog, setNotification }) => {
   const [visible, setVisible] = useState(false)
 
   const blogStyle = {
@@ -12,10 +12,22 @@ const Blog = ({ blog }) => {
   }
 
   const handleLikes = () => {
-    blog.likes++
-    blog.user = blog.user.id
+    const blogUpdate = { ...blog, likes: blog.likes + 1, user: blog.user.id }
+    blogService.updateBlog(blogUpdate)
+    addLike(blogUpdate)
+  }
 
-    blogService.updateBlog(blog)
+  const handleDelete = () => {
+    const ok = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
+    if (ok) {
+      blogService.deleteBlog(blog.id).then(() => {
+        removeBlog(blog)
+        setNotification({
+          message: `The blog ${blog.title} by ${blog.author} has been removed!`,
+          type: 'success'
+        })
+      })
+    }
   }
 
   return (
@@ -31,6 +43,7 @@ const Blog = ({ blog }) => {
           <button onClick={handleLikes}>Like</button>
         </div>
         <div>{blog.user.name}</div>
+        <button onClick={handleDelete}>Remove</button>
       </div>
     </div>
   )

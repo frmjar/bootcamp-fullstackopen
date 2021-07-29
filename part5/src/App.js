@@ -16,15 +16,17 @@ const App = () => {
   const toggleRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
+      blogs.sort((blogA, blogB) => blogA.likes < blogB.likes)
       setBlogs(blogs)
-    )
+    })
   }, [])
 
   useEffect(() => {
     const usr = window.localStorage.getItem('user')
     if (usr) {
       setUser(JSON.parse(usr))
+      blogService.setToken(JSON.parse(usr).token)
     }
   }, [])
 
@@ -47,11 +49,11 @@ const App = () => {
           <Logout name={user.name} setUser={setUser} />
           <Togglable titleButton='Create new blog' ref={toggleRef}>
             <BlogForm
-              token={user.token} blogs={blogs} setBlogs={setBlogs}
+              blogs={blogs} setBlogs={setBlogs}
               setNotification={setNotifications} toggleRef={toggleRef}
             />
           </Togglable>
-          <Blogs blogs={blogs} />
+          <Blogs blogs={blogs} setBlogs={setBlogs} setNotification={setNotifications} user={user} />
         </>}
     </>
 

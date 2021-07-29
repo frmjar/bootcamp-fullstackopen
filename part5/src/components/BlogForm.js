@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const BlogForm = ({ token, blogs, setBlogs, setNotification, toggleRef }) => {
+const BlogForm = ({ blogs, setBlogs, setNotification, toggleRef }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -15,7 +15,7 @@ const BlogForm = ({ token, blogs, setBlogs, setNotification, toggleRef }) => {
       url: url
     }
 
-    blogService.save(blog, token).then((blog) => {
+    blogService.save(blog).then((blog) => {
       setTitle('')
       setAuthor('')
       setUrl('')
