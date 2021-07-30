@@ -19,7 +19,6 @@ const BlogForm = ({ blogs, setBlogs, setNotification, toggleRef }) => {
       setTitle('')
       setAuthor('')
       setUrl('')
-      console.log(toggleRef)
       toggleRef.current.toggleChild()
       setBlogs([...blogs, blog])
       console.log('Blog saved')

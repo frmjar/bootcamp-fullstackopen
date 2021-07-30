@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-closing-tag-location */
 import React, { useState, useImperativeHandle, forwardRef } from 'react'
+import PropTypes from 'prop-types'
 
 const Togglable = forwardRef(({ children, titleButton }, ref) => {
   const [toggled, setToggled] = useState(false)
@@ -26,5 +27,10 @@ const Togglable = forwardRef(({ children, titleButton }, ref) => {
     </div>
   )
 })
+
+Togglable.propTypes = {
+  children: PropTypes.element.isRequired,
+  titleButton: PropTypes.string.isRequired
+}
 
 export default Togglable

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import '../styles/alerts.css'
 
 const Alerts = ({ alert }) => {
@@ -13,6 +14,13 @@ const Alerts = ({ alert }) => {
       <span>{message}</span>
     </div>
   )
+}
+
+Alerts.propTypes = {
+  alert: PropTypes.exact({
+    message: PropTypes.string,
+    type: PropTypes.string
+  })
 }
 
 export default Alerts
