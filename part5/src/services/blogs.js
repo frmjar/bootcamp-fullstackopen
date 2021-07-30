@@ -18,7 +18,6 @@ const save = (blog) => {
 }
 
 const updateBlog = (blog) => {
-  console.log(blog)
   const request = axios.put(`${baseUrl}/${blog.id}`, blog)
   return request.then(response => response.data)
 }
