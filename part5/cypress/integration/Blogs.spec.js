@@ -62,5 +62,13 @@ describe('Blog app', function () {
       cy.get('button').contains('Like').click()
       cy.get('.likes').contains('1')
     })
+
+    it('Remove blog', function () {
+      cy.wait(500)
+      cy.get('button').contains('show').click()
+      cy.get('button').contains('Remove').click()
+
+      cy.get('.alert').contains('The blog Nuevo blog de pruebas by Elemao has been removed!')
+    })
   })
 })
