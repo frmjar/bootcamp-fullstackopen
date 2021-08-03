@@ -1,12 +1,7 @@
 describe('Blog app', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
-
-    cy.request('POST', 'http://localhost:3003/api/users', {
-      username: 'elemao',
-      password: 'yolo'
-    })
-
+    cy.addUser('elemao', 'yolo')
     cy.visit('http://localhost:3000')
   })
 
@@ -34,6 +29,38 @@ describe('Blog app', function () {
 
       cy.get('.alert').contains('invalid username or password')
       cy.contains('Login to application')
+    })
+  })
+
+  describe.only('When logged in', function () {
+    beforeEach(function () {
+      cy.login('elemao', 'yolo')
+      cy.newBlog({
+        title: 'Nuevo blog de pruebas',
+        author: 'Elemao',
+        url: 'http://fasdfa'
+      })
+    })
+
+    it('A blog can be created', function () {
+      cy.wait(500)
+      cy.get('button').contains('Create new blog').click()
+
+      cy.get('input[name="title"]').type('Probando terrible test')
+      cy.get('input[name="author"]').type('Ferremejar')
+      cy.get('input[name="url"]').type('http://omg.com')
+
+      cy.get('button').contains('Create').click()
+
+      cy.get('.alert').contains('A new blog Probando terrible test by Ferremejar has been saved!')
+    })
+
+    it('Like blog', function () {
+      cy.wait(500)
+      cy.get('button').contains('show').click()
+      cy.get('.likes').contains('0')
+      cy.get('button').contains('Like').click()
+      cy.get('.likes').contains('1')
     })
   })
 })

@@ -1,25 +1,22 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add('addUser', (username, password) => {
+  cy.request('POST', 'http://localhost:3003/api/users', {
+    username,
+    password
+  })
+})
+
+Cypress.Commands.add('login', (username, password) => {
+  cy.get('input[name="username"]').type('elemao')
+  cy.get('input[name="password"]').type('yolo')
+  cy.get('input').contains('Login').click()
+})
+
+Cypress.Commands.add('newBlog', ({ title, author, url }) => {
+  cy.get('button').contains('Create new blog').click()
+
+  cy.get('input[name="title"]').type(title)
+  cy.get('input[name="author"]').type(author)
+  cy.get('input[name="url"]').type(url)
+
+  cy.get('button').contains('Create').click()
+})
