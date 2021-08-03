@@ -38,3 +38,6 @@ Content-Type: application/json
   "password": "holi"
 }
 ###
+
+POST http://localhost:3003/api/testing/reset
+Content-Type: application/json

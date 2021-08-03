@@ -9,5 +9,6 @@ module.exports =
   {
     mongoUrl,
     PORT,
-    JWT_SECRET
+    JWT_SECRET,
+    entorno
   }
