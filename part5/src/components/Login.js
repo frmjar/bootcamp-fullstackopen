@@ -18,7 +18,7 @@ const Login = ({ setUser, setNotification }) => {
       setUser(user)
       window.localStorage.setItem('user', JSON.stringify(user))
       setNotification({
-        message: `${user.name} successfully logged in`,
+        message: `${user.username} successfully logged in`,
         type: 'success'
       })
     }).catch((error) => {
