@@ -13,6 +13,7 @@ const App = () => {
   const create = (evt) => {
     evt.preventDefault()
     const anecdote = evt.target.anecdote.value
+    evt.target.anecdote.value = ''
     dispatch(createAnecdote(anecdote))
   }
 

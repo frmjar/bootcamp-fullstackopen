@@ -26,7 +26,7 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case '@anecdote/vote':
       return state.map((anecdote) => {
-        if (anecdote.id === action.anecdoteId) {
+        if (anecdote.id === action.anecdote.id) {
           return {
             ...anecdote,
             votes: anecdote.votes + 1
@@ -44,10 +44,10 @@ const reducer = (state = initialState, action) => {
   }
 }
 
-const voteAnecdote = anecdoteId => {
+const voteAnecdote = id => {
   return {
     type: '@anecdote/vote',
-    anecdoteId
+    anecdote: { id }
   }
 }
 
