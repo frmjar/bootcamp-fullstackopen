@@ -34,6 +34,11 @@ const reducer = (state = initialState, action) => {
         }
         return anecdote
       })
+    case '@anecdote/create':
+      return [
+        ...state,
+        action.anecdote
+      ]
     default:
       return state
   }
@@ -46,7 +51,15 @@ const voteAnecdote = anecdoteId => {
   }
 }
 
+const createAnecdote = (anecdote) => {
+  return {
+    type: '@anecdote/create',
+    anecdote: asObject(anecdote)
+  }
+}
+
 export default reducer
 export {
-  voteAnecdote
+  voteAnecdote,
+  createAnecdote
 }
