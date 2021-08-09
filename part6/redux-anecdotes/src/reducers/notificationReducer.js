@@ -1,4 +1,4 @@
-const notificationReducer = (state = 'Notificacion inicial', action) => {
+const notificationReducer = (state = null, action) => {
   switch (action.type) {
     case '@notification/new':
       return action.notification
