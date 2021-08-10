@@ -8,4 +8,13 @@ const getAll = () => {
     .catch(error => error.response.data)
 }
 
-export default { getAll }
+const create = (anecdote) => {
+  return axios.post(baseUrl, {
+    content: anecdote,
+    votes: 0
+  })
+    .then(response => response.data)
+    .catch(error => error.response.data)
+}
+
+export default { getAll, create }
