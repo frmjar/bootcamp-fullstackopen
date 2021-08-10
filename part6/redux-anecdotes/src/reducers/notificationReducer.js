@@ -9,10 +9,15 @@ const notificationReducer = (state = null, action) => {
   }
 }
 
-const newNotification = notification => {
-  return {
-    type: '@notification/new',
-    notification
+const newNotification = (notification, time) => {
+  return async dispatch => {
+    dispatch({
+      type: '@notification/new',
+      notification
+    })
+    setTimeout(() => {
+      dispatch(clearNotification())
+    }, time * 1000)
   }
 }
 

@@ -32,13 +32,23 @@
     },
     {
       "content": "hola",
-      "votes": 0,
+      "votes": 1,
       "id": "FcJIGKm"
     },
     {
       "content": "fadsfad",
-      "votes": 3,
+      "votes": 4,
       "id": "Nid9OpS"
+    },
+    {
+      "content": "fafadfadf",
+      "votes": 0,
+      "id": "9TGfIN7"
+    },
+    {
+      "content": "gsfgfsg",
+      "votes": 0,
+      "id": "6axe64d"
     }
   ]
 }
