@@ -32,9 +32,12 @@ const voteAnecdote = id => {
 }
 
 const createAnecdote = (anecdote) => {
-  return {
-    type: '@anecdote/create',
-    anecdote
+  return async dispatch => {
+    const result = await anecdoteService.create(anecdote)
+    dispatch({
+      type: '@anecdote/create',
+      anecdote: result
+    })
   }
 }
 
