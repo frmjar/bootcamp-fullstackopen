@@ -17,4 +17,12 @@ const create = (anecdote) => {
     .catch(error => error.response.data)
 }
 
-export default { getAll, create }
+const vote = anecdote => {
+  return axios.put(`${baseUrl}/${anecdote.id}`,
+    { ...anecdote, votes: anecdote.votes + 1 }
+  )
+    .then(response => response.data)
+    .catch(error => error.response.data)
+}
+
+export default { getAll, create, vote }

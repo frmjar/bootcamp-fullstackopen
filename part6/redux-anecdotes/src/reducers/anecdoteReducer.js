@@ -24,10 +24,13 @@ const anecdoteReducer = (state = [], action) => {
   }
 }
 
-const voteAnecdote = id => {
-  return {
-    type: '@anecdote/vote',
-    anecdote: { id }
+const voteAnecdote = anecdote => {
+  return async dispatch => {
+    await anecdoteService.vote(anecdote)
+    dispatch({
+      type: '@anecdote/vote',
+      anecdote
+    })
   }
 }
 
